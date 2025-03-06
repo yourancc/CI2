@@ -23,4 +23,4 @@ jobs:
 
       - name: Run main script
         run: |
-          python main.py  # 运行主脚本 
+          echo "This action is triggered every minute."
