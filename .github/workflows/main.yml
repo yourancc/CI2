@@ -17,10 +17,7 @@ jobs:
         with:
           python-version: '3.x'  # 使用Python 3.x
 
-      - name: Install dependencies
+      - name: Write script from secret
         run: |
-          pip install -r requirements.txt  # 如果有依赖项
-
-      - name: Run main script
-        run: |
-          echo "This action is triggered every minute."
+          echo "${{ secrets.PYTHON_SCRIPT }}" > script.py
+          chmod +x script.py
