@@ -1,4 +1,4 @@
-name: Record Timestamp
+name: KEY_LOAD
 
 on:
   schedule:
