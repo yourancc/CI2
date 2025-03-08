@@ -22,7 +22,7 @@ jobs:
         run: |
           # 使用 GitHub API 获取当前变量的值
           response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID")
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID"  --verbose)
           current_value=$(echo "$response" | jq -r '.value')
           echo "::set-output name=current_value::$current_value"
 
@@ -43,4 +43,4 @@ jobs:
           curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"name\": \"RUN_ID\", \"value\": \"$NEW_VALUE\"}" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID"
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID"  --verbose
