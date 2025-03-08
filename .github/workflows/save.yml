@@ -22,11 +22,11 @@ jobs:
         run: |
           # 使用 GitHub API 获取当前变量的值
           response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/COUNTER")
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID")
           current_value=$(echo "$response" | jq -r '.value')
           echo "::set-output name=current_value::$current_value"
 
-      - name: Increment counter value
+      - name: Increment RUN_ID value
         id: increment
         run: |
           new_value=$(( ${{ steps.get-counter.outputs.current_value }} + 1 ))
@@ -43,4 +43,4 @@ jobs:
           curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"name\": \"COUNTER\", \"value\": \"$NEW_VALUE\"}" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/COUNTER"
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID"
