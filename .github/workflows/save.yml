@@ -34,7 +34,7 @@ jobs:
 
       - name: Update repository variable
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           REPO_OWNER: "yourancc"
           REPO_NAME: "CI2"
           NEW_VALUE: ${{ steps.increment.outputs.new_value }}
@@ -42,5 +42,5 @@ jobs:
           # 使用 GitHub API 更新变量的值
           curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"name\": \"COUNTER\", \"value\": \"$NEW_VALUE\"}" \
+            -d "{\"name\": \"RUN_ID\", \"value\": \"$NEW_VALUE\"}" \
             "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID"
