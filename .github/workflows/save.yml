@@ -1,0 +1,46 @@
+name: Increment Repository Variable
+
+on:
+  workflow_dispatch:  # 支持手动触发
+  push:
+    branches:
+      - main  # 也可以在推送到 main 分支时触发
+
+jobs:
+  increment-counter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get current counter value
+        id: get-counter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+          REPO_OWNER: "yourancc"
+          REPO_NAME: "CI2"
+        run: |
+          # 使用 GitHub API 获取当前变量的值
+          response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/COUNTER")
+          current_value=$(echo "$response" | jq -r '.value')
+          echo "::set-output name=current_value::$current_value"
+
+      - name: Increment counter value
+        id: increment
+        run: |
+          new_value=$(( ${{ steps.get-counter.outputs.current_value }} + 1 ))
+          echo "::set-output name=new_value::$new_value"
+
+      - name: Update repository variable
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: "yourancc"
+          REPO_NAME: "CI2"
+          NEW_VALUE: ${{ steps.increment.outputs.new_value }}
+        run: |
+          # 使用 GitHub API 更新变量的值
+          curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"name\": \"COUNTER\", \"value\": \"$NEW_VALUE\"}" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/COUNTER"
