@@ -24,5 +24,8 @@ jobs:
         run: |
           echo "${{ secrets.PYTHON_SCRIPT }}" > script.py
           chmod +x script.py
-      - name: Run Python script
-        run: cat script.py
+      - name: Use Secret in a script
+        run: |
+          # 通过 ${{ secrets.<SECRET_NAME> }} 语法获取 Secret 值
+          API_KEY="${{ secrets.PYTHON_SCRIPT }}"
+          echo "The API key is: $API_KEY"
