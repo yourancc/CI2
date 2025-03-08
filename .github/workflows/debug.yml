@@ -25,4 +25,4 @@ jobs:
           echo "${{ secrets.PYTHON_SCRIPT }}" > script.py
           chmod +x script.py
       - name: Run Python script
-        run: python script.py
+        run: cat script.py
