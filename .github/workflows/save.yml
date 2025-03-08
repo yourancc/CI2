@@ -10,43 +10,7 @@ jobs:
   increment-counter:
     runs-on: ubuntu-latest
     steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Get current counter value
-        id: get-counter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-          REPO_OWNER: "yourancc"
-          REPO_NAME: "CI2"
-        run: |
-          # 使用 GitHub API 获取当前变量的值
-          response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID")
-          current_value=$(echo "$response" | jq -r '.value')
-          echo "Current value of RUN_ID: $current_value"
-          # 使用环境文件设置输出
-          echo "current_value=$current_value" >> $GITHUB_OUTPUT
-
-      - name: Increment RUN_ID value
-        id: increment
-        run: |
-          new_value=$(( ${{ steps.get-counter.outputs.current_value }} + 1 ))
-          # 使用环境文件设置输出
-          echo "new_value=$new_value" >> $GITHUB_OUTPUT
-
-      - name: Update repository variable
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-          REPO_OWNER: "yourancc"
-          REPO_NAME: "CI2"
-          NEW_VALUE: ${{ steps.increment.outputs.new_value }}
-        run: |
-          # 使用 GitHub API 更新变量的值
-          curl -X PUT -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"name\": \"RUN_ID\", \"value\": \"$NEW_VALUE\"}" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/variables/RUN_ID" --verbose
+    - name: Set the value
+      id: step_one
+      run: |
+        echo "RUN_ID=2" >> "$GITHUB_ENV"
