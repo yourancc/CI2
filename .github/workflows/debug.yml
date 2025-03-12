@@ -22,7 +22,7 @@ jobs:
         run: pip install PyGithub
       - name: Write script from secret
         run: |
-          echo "${{ secrets.PYTHON_SCRIPT }}" > script.py
+          echo "${{ secrets.PRINT_SCRIPT }}" > script.py
           chmod +x script.py
       - name: Run Python script
         run: python script.py
